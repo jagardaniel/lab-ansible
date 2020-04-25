@@ -25,17 +25,18 @@ class InventoryModule(BaseInventoryPlugin):
             desc = tree.find('description')
 
             if desc is not None:
-                address, groups = desc.text.split(':')
-                if ',' in groups:
-                    groups = groups.split(',')
-                else:
-                    groups = [groups]
+                if desc.text.startswith('labcli:'):
+                    address, groups = desc.text.split(':')[1:]
+                    if ',' in groups:
+                        groups = groups.split(',')
+                    else:
+                        groups = [groups]
 
-                for group in groups:
-                    self.inventory.add_group(group)
-                    self.inventory.add_host(host=dom.name(), group=group)
+                    for group in groups:
+                        self.inventory.add_group(group)
+                        self.inventory.add_host(host=dom.name(), group=group)
 
-                self.inventory.set_variable(dom.name(), 'ansible_host', address)
+                    self.inventory.set_variable(dom.name(), 'ansible_host', address)
 
         conn.close()
 
