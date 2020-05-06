@@ -1,0 +1,33 @@
+machine_id=
+licensepath=
+serverquerydocs_path=serverquerydocs/
+
+voice_ip={{ teamspeak_voice_ip }}
+default_voice_port={{ teamspeak_voice_port }}
+
+filetransfer_ip={{ teamspeak_filetransfer_ip }}
+filetransfer_port={{ teamspeak_filetransfer_port }}
+
+query_ip={{ teamspeak_query_ip }}
+query_port={{ teamspeak_query_port }}
+query_ip_whitelist=query_ip_whitelist.txt
+query_ip_blacklist=query_ip_blacklist.txt
+query_ssh_ip={{ teamspeak_query_ssh_ip }}
+query_ssh_port={{ teamspeak_query_ssh_port }}
+query_protocols=raw,ssh
+query_ssh_rsa_host_key=ssh_host_rsa_key
+query_timeout=300
+
+query_skipbruteforcecheck=0
+query_buffer_mb=20
+
+dbplugin=ts3db_sqlite3
+dbpluginparameter=
+dbsqlpath=sql/
+dbsqlcreatepath=create_sqlite/
+dbconnections=10
+dbclientkeepdays=60
+
+logpath=logs
+logquerycommands=0
+logappend=1

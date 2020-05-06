@@ -1,0 +1,8 @@
+{{ teamspeak_path }}/logs/ts3server_*.log {
+    weekly
+    rotate 16
+    copytruncate
+    compress
+    notifempty
+    missingok
+}

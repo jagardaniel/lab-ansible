@@ -1,0 +1,5 @@
+---
+
+firewalld_zone: public
+firewalld_tcp: []
+firewalld_udp: []

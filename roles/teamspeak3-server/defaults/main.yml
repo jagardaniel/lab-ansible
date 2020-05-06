@@ -1,0 +1,17 @@
+---
+
+teamspeak_mirror: https://files.teamspeak-services.com/releases/server
+teamspeak_version: 3.12.1
+teamspeak_sha256: cfbffba30a570f0ba33a74ce5e5dbda54ce564d917a27183cdcaf82cc2b4abb7
+
+teamspeak_user: teamspeak
+teamspeak_path: /opt/teamspeak3-server
+
+teamspeak_voice_ip: ""
+teamspeak_voice_port: 9987
+teamspeak_filetransfer_ip: ""
+teamspeak_filetransfer_port: 30033
+teamspeak_query_ip: 127.0.0.1
+teamspeak_query_port: 10011
+teamspeak_query_ssh_ip: 127.0.0.1
+teamspeak_query_ssh_port: 10022

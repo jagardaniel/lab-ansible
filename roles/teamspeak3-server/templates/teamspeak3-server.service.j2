@@ -1,0 +1,16 @@
+[Unit]
+Description=Teamspeak 3 Server
+After=network.target
+
+[Service]
+User={{ teamspeak_user }}
+Group={{ teamspeak_user }}
+WorkingDirectory={{ teamspeak_path }}
+ExecStart={{ teamspeak_path }}/ts3server_startscript.sh start inifile=ts3server.ini
+ExecStop={{ teamspeak_path }}/ts3server_startscript.sh stop
+PIDFile={{ teamspeak_path }}/ts3server.pid
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

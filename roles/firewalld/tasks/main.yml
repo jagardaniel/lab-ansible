@@ -1,0 +1,21 @@
+---
+
+- name: Add TCP rules
+  firewalld:
+    port: "{{ item }}/tcp"
+    permanent: yes
+    immediate: yes
+    zone: "{{ firewalld_zone }}"
+    state: enabled
+  with_items: "{{ firewalld_tcp }}"
+  tags: firewalld
+
+- name: Add UDP rules
+  firewalld:
+    port: "{{ item }}/udp"
+    permanent: yes
+    immediate: yes
+    zone: "{{ firewalld_zone }}"
+    state: enabled
+  with_items: "{{ firewalld_udp }}"
+  tags: firewalld

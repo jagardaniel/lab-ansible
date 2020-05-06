@@ -1,0 +1,104 @@
+---
+
+- name: Add system user
+  user:
+    name: "{{ teamspeak_user }}"
+    home: "{{ teamspeak_path }}"
+    create_home: no
+    shell: /usr/sbin/nologin
+    system: yes
+    state: present
+  tags: teamspeak3-server
+
+- name: Create directory
+  file:
+    path: "{{ teamspeak_path }}"
+    state: directory
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
+    mode: 0750
+  tags: teamspeak3-server
+
+- name: Create a version file
+  lineinfile:
+    name: "{{ teamspeak_path }}/version"
+    line: "{{ teamspeak_version }}"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
+    regexp: "^"
+    create: yes
+    state: present
+  register: version
+  tags: teamspeak3-server
+  
+# Tasks inside this block will only run if the version has changed
+- block:
+  - name: Create temporary working directory
+    tempfile:
+      state: directory
+    register: temp_dir
+
+  - name: Download teamspeak server
+    get_url:
+      url: "{{ teamspeak_mirror }}/{{ teamspeak_version }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}.tar.bz2"
+      dest: "{{ temp_dir['path'] }}"
+      checksum: "sha256:{{ teamspeak_sha256 }}"
+
+  - name: Extract archive
+    unarchive:
+      src: "{{ temp_dir['path'] }}/teamspeak3-server_linux_amd64-{{ teamspeak_version }}.tar.bz2"
+      dest: "{{ teamspeak_path }}"
+      remote_src: yes
+      owner: "{{ teamspeak_user }}"
+      group: "{{ teamspeak_user }}"
+      extra_opts:
+      - "--strip-components=1"
+
+  - name: Remove temporary download directory
+    file:
+      path: "{{ temp_dir['path'] }}"
+      state: absent
+    notify:
+      - restart teamspeak3-server
+
+  when: version.changed
+  tags: teamspeak3-server
+# End of block
+  
+- name: Copy configuration
+  template:
+    src: ts3server.ini.j2
+    dest: "{{ teamspeak_path }}/ts3server.ini"
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
+  notify:
+    - restart teamspeak3-server
+  tags: teamspeak3-server
+
+- name: Accept the license agreement
+  copy:
+    content: ""
+    dest: "{{ teamspeak_path }}/.ts3server_license_accepted"
+    force: no
+    owner: "{{ teamspeak_user }}"
+    group: "{{ teamspeak_user }}"
+  tags: teamspeak3-server
+
+- name: Copy systemd unit file
+  template:
+    src: teamspeak3-server.service.j2
+    dest: /etc/systemd/system/teamspeak3-server.service
+  tags: teamspeak3-server
+
+- name: Copy logrotate configuration
+  template:
+    src: teamspeak3-server-logrotate.j2
+    dest: /etc/logrotate.d/teamspeak3-server
+  tags: teamspeak3-server
+  
+- name: Start and enable the teamspeak server
+  service:
+    name: teamspeak3-server
+    state: started
+    enabled: yes
+  tags: teamspeak3-server

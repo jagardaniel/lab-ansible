@@ -1,0 +1,9 @@
+---
+
+# labcli create --distro centos --groups tsservers lab01
+
+firewalld_tcp:
+  - 30033
+
+firewalld_udp:
+  - 9987

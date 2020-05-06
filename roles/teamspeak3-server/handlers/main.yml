@@ -1,0 +1,6 @@
+---
+
+- name: restart teamspeak3-server
+  service:
+    name: teamspeak3-server
+    state: restarted
