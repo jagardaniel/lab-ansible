@@ -1,0 +1,22 @@
+---
+
+nsd_interfaces: []
+nsd_verbosity: 1
+nsd_zonedir: '/etc/nsd/zones'
+nsd_zones: []
+
+# Example:
+#nsd_interfaces:
+#  - 127.0.0.1@5353
+
+#nsd_zones:
+#  - name: example.com
+#    serial: 0000000001
+#    mname: ns01
+#    rname: hostmaster
+#    records:
+#      - type: NS
+#        content: ns01
+#      - name: ns01
+#        type: A
+#        content: "192.168.0.1"

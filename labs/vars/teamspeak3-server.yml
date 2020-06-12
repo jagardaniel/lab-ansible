@@ -1,6 +1,6 @@
 ---
 
-# labcli create --distro centos --groups tsservers lab01
+# lab-cli create --distro centos --groups tsservers lab01
 
 firewalld_tcp:
   - 30033

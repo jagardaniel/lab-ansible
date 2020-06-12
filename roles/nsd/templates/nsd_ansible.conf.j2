@@ -1,0 +1,13 @@
+server:
+    verbosity: {{ nsd_verbosity }}
+    zonesdir: {{ nsd_zonedir }}
+
+{% for interface in nsd_interfaces %}
+    interface: {{ interface }} 
+{% endfor %}
+
+{% for zone in nsd_zones %}
+zone:
+    name: {{ zone.name }}
+    zonefile: {{ zone.name }}.zone
+{% endfor %}

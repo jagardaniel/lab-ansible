@@ -1,0 +1,41 @@
+---
+
+- name: Install packages
+  apt:
+    name: nsd
+    state: present
+  tags: nsd
+
+- name: Create directory for zones
+  file:
+    path: "{{ nsd_zonedir }}"
+    state: directory
+  tags: nsd
+
+- name: Copy configuration
+  template:
+    src: nsd_ansible.conf.j2
+    dest: /etc/nsd/nsd.conf.d/nsd_ansible.conf
+    validate: "/usr/sbin/nsd-checkconf %s"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart nsd
+  tags: nsd
+
+- name: Generate zone files
+  template:
+    src: zone.j2
+    dest: "{{ nsd_zonedir }}/{{ item.name }}.zone"
+    validate: "/usr/sbin/nsd-checkzone {{ item.name }} %s"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ nsd_zones }}"
+
+  loop_control:
+    label: "{{ item.name }}"
+  notify:
+    - reload nsd
+  tags: nsd

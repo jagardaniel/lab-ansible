@@ -1,0 +1,11 @@
+---
+
+- name: restart nsd
+  service:
+    name: nsd
+    state: restarted
+
+- name: reload nsd
+  service:
+    name: nsd
+    state: reloaded
