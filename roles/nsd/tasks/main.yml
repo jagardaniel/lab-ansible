@@ -33,7 +33,6 @@
     group: root
     mode: 0644
   with_items: "{{ nsd_zones }}"
-
   loop_control:
     label: "{{ item.name }}"
   notify:
