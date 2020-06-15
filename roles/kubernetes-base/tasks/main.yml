@@ -1,0 +1,38 @@
+---
+
+- name: Disable swap
+  command: /sbin/swapoff --all
+  tags: kubernetes-base
+
+- name: Disable swap in fstab file
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - none
+    - swap
+  tags: kubernetes-base
+
+- name: Add apt key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  tags: kubernetes-base
+
+- name: Add repository
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    filename: kubernetes
+    update_cache: yes
+    state: present
+  tags: kubernetes-base
+
+- name: Install packages
+  apt:
+    pkg:
+    - docker.io
+    - kubeadm
+    - kubelet
+    - kubectl
+  tags: kubernetes-base

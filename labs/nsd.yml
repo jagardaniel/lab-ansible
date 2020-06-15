@@ -1,8 +1,0 @@
----
-
-- name: Setup nsd
-  hosts: nameservers
-  vars_files:
-    - vars/nsd.yml
-  roles:
-    - nsd

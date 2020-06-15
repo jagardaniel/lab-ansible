@@ -1,9 +1,0 @@
----
-
-- name: Setup teamspeak3 server
-  hosts: tsservers
-  vars_files:
-    - vars/teamspeak3-server.yml
-  roles:
-    - teamspeak3-server
-    - firewalld
