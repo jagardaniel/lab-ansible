@@ -1,0 +1,19 @@
+---
+
+# There is probably a better way to do this.
+- name: Check if kubelet config exists
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: config
+  tags: kubernetes-master
+
+- name: Initialize the kubernetes cluster
+  command: /usr/bin/kubeadm init --pod-network-cidr "{{ kubernetes_master_pod_cidr }}"
+  when: not config.stat.exists
+  tags: kubernetes-master
+
+- name: Install pod network (Calico)
+  command: /usr/bin/kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+  environment:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+  tags: kubernetes-master

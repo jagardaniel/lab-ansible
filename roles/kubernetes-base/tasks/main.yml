@@ -2,6 +2,7 @@
 
 - name: Disable swap
   command: /sbin/swapoff --all
+  when: ansible_swaptotal_mb > 0
   tags: kubernetes-base
 
 - name: Disable swap in fstab file

@@ -1,0 +1,28 @@
+---
+
+# Set up a basic kubernetes cluster with one master and some worker nodes
+# I haven't figured out the external IP part yet.
+
+# Based on theses articles
+# https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+# https://kubernetes.io/blog/2019/03/15/kubernetes-setup-using-ansible-and-vagrant/
+
+# VM examples:
+# lab-cli create --groups k8s_all,k8s_masters lab01
+# lab-cli create --groups k8s_all,k8s_nodes lab02
+# lab-cli create --groups k8s_all,k8s_nodes lab03
+
+- name: Setup kubernetes base
+  hosts: k8s_all
+  roles:
+    - kubernetes-base
+
+- name: Setup kubernetes master
+  hosts: k8s_masters
+  roles:
+    - kubernetes-master
+
+- name: Setup kubernetes worker nodes
+  hosts: k8s_nodes
+  roles:
+    - kubernetes-node

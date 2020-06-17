@@ -1,0 +1,21 @@
+---
+
+# There is probably a better way to do this.
+- name: Check if kubelet config exists
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: config
+  tags: kubernetes-node
+
+- name: Generate a join command on a master node
+  command: /usr/bin/kubeadm token create --print-join-command
+  run_once: true
+  delegate_to: "{{ groups['k8s_masters'][0] }}"
+  register: join_command
+  when: not config.stat.exists
+  tags: kubernetes-node
+
+- name: Run join cluster command
+  command: "/usr/bin/{{ join_command.stdout }}"
+  when: not config.stat.exists
+  tags: kubernetes-node
